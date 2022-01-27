@@ -8,7 +8,9 @@ import lombok.Getter;
 public enum DistanceUnit {
 
 		KM("km"),
-		MI("mi");
+		M("m"),
+		MI("mi"),
+		FT("ft");
 
 		private final String abbreviation;
 }
