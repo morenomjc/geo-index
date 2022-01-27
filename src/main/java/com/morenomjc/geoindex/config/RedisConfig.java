@@ -14,4 +14,5 @@ public class RedisConfig {
 	public GeoOperations<String, String> geoOperations(final RedisOperations<String, String> redisOperations) {
 		return redisOperations.opsForGeo();
 	}
+
 }

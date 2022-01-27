@@ -7,10 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum DistanceUnit {
 
-		KM("km"),
-		M("m"),
-		MI("mi"),
-		FT("ft");
+	KM("km"), M("m"), MI("mi"), FT("ft");
 
-		private final String abbreviation;
+	private final String abbreviation;
+
 }

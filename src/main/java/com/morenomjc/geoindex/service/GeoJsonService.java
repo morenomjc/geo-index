@@ -4,5 +4,7 @@ import com.mapbox.geojson.GeoJson;
 import java.util.List;
 
 public interface GeoJsonService {
-		List<List<Double>> extractCoordinates(GeoJson geoJson);
+
+	List<List<Double>> extractCoordinates(GeoJson geoJson);
+
 }

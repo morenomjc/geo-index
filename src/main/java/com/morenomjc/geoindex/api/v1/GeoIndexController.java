@@ -26,29 +26,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GeoIndexController {
 
-  private final GeoIndexService geoIndexService;
+	private final GeoIndexService geoIndexService;
 
-  @Operation(
-      summary =
-          "Index all points in the GeoJSON. Returns the list of generated ids for each points indexed.")
-  @PostMapping(path = "/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Set<String>> index(
-      @PathVariable String key,
-      @RequestParam String id,
-      @RequestBody String json) {
-    log.info("Indexing request received.");
-    return ResponseEntity.ok(geoIndexService.index(new GeoIndex(key, id, json)));
-  }
+	@Operation(summary = "Index all points in the GeoJSON. Returns the list of generated ids for each points indexed.")
+	@PostMapping(path = "/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Set<String>> index(@PathVariable String key, @RequestParam String id,
+			@RequestBody String json) {
+		log.info("Indexing request received.");
+		return ResponseEntity.ok(geoIndexService.index(new GeoIndex(key, id, json)));
+	}
 
-  @Operation(summary = "Search for locations within. Returns the ids within radius of input.")
-  @GetMapping(path = "/{key}/radius", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Set<String>> radius(
-      @PathVariable String key,
-      @RequestParam Double lat,
-      @RequestParam Double lon,
-      @RequestParam Double dist,
-      @RequestParam DistanceUnit unit) {
-    log.info("Radius search request received.");
-    return ResponseEntity.ok(geoIndexService.radius(new GeoRadius(key, lat, lon, dist, unit)));
-  }
+	@Operation(summary = "Search for locations within. Returns the ids within radius of input.")
+	@GetMapping(path = "/{key}/radius", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Set<String>> radius(@PathVariable String key, @RequestParam Double lat,
+			@RequestParam Double lon, @RequestParam Double dist, @RequestParam DistanceUnit unit) {
+		log.info("Radius search request received.");
+		return ResponseEntity.ok(geoIndexService.radius(new GeoRadius(key, lat, lon, dist, unit)));
+	}
+
 }

@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GeoIndex {
 
-		private final String key;
-		private final String id;
-		private final String geoJson;
+	private final String key;
+
+	private final String id;
+
+	private final String geoJson;
 
 }

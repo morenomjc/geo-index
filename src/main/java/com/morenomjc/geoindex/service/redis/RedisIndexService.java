@@ -36,65 +36,65 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RedisIndexService implements GeoIndexService {
 
-		private static final String ID_FORMAT = "%s:%d";
-		private static final String ID_SEPARATOR = ":";
+	private static final String ID_FORMAT = "%s:%d";
 
-		private final GeoJsonService geoJsonService;
-		private final GeoOperations<String, String> geoOperations;
+	private static final String ID_SEPARATOR = ":";
 
-		@Override
-		public Set<String> index(GeoIndex geoIndex) {
-				GeoJson geoJson = GeoJsonUtils.fromJson(geoIndex.getGeoJson());
-				List<List<Double>> coordinates = geoJsonService.extractCoordinates(geoJson);
-    return indexCoordinates(geoIndex.getKey(), geoIndex.getId(), coordinates);
+	private final GeoJsonService geoJsonService;
+
+	private final GeoOperations<String, String> geoOperations;
+
+	@Override
+	public Set<String> index(GeoIndex geoIndex) {
+		GeoJson geoJson = GeoJsonUtils.fromJson(geoIndex.getGeoJson());
+		List<List<Double>> coordinates = geoJsonService.extractCoordinates(geoJson);
+		return indexCoordinates(geoIndex.getKey(), geoIndex.getId(), coordinates);
+	}
+
+	@Override
+	public Set<String> radius(GeoRadius geoRadius) {
+		Point center = new Point(geoRadius.getLat(), geoRadius.getLon());
+		Distance distance = new Distance(geoRadius.getDist(), getMetric(geoRadius.getUnit()));
+		Circle radius = new Circle(center, distance);
+		GeoResults<RedisGeoCommands.GeoLocation<String>> geoResults = geoOperations.radius(geoRadius.getKey(), radius);
+		Set<String> results = extractFromGeoResults(geoResults);
+		log.info("Found {} results within {} {}", results.size(), geoRadius.getDist(), geoRadius.getUnit());
+		return results;
+	}
+
+	private Metric getMetric(DistanceUnit unit) {
+		Optional<Metrics> metric = Arrays.stream(Metrics.values())
+				.filter(metrics -> metrics.getAbbreviation().equals(unit.getAbbreviation())).findFirst();
+		return metric.orElseThrow(() -> {
+			throw new IllegalArgumentException("Unsupported distance unit " + unit);
+		});
+	}
+
+	private Set<String> indexCoordinates(String key, String idParent, List<List<Double>> coordinates) {
+		log.info("Indexing {} coordinates", coordinates.size());
+
+		Map<String, Point> geoPoints = new HashMap<>();
+
+		AtomicInteger idCounter = new AtomicInteger(0);
+		coordinates.forEach(coordinate -> {
+			String id = String.format(ID_FORMAT, idParent, idCounter.getAndIncrement());
+			Point point = new Point(coordinate.get(0), coordinate.get(1));
+			geoPoints.put(id, point);
+		});
+		Long result = geoOperations.add(key, geoPoints);
+		log.info("Indexed {} points.", result);
+		return geoPoints.keySet();
+	}
+
+	private Set<String> extractFromGeoResults(GeoResults<GeoLocation<String>> geoResults) {
+		if (geoResults != null) {
+			return geoResults.getContent().stream()
+					.map(geoLocationGeoResult -> geoLocationGeoResult.getContent().getName()).map(id -> {
+						int index = id.lastIndexOf(ID_SEPARATOR);
+						return id.substring(0, index);
+					}).collect(Collectors.toSet());
 		}
+		return Collections.emptySet();
+	}
 
-		@Override
-		public Set<String> radius(GeoRadius geoRadius) {
-				Point center = new Point(geoRadius.getLat(), geoRadius.getLon());
-				Distance distance = new Distance(geoRadius.getDist(), getMetric(geoRadius.getUnit()));
-				Circle radius = new Circle(center, distance);
-				GeoResults<RedisGeoCommands.GeoLocation<String>> geoResults = geoOperations.radius(geoRadius.getKey(), radius);
-				Set<String> results = extractFromGeoResults(geoResults);
-				log.info("Found {} results within {} {}", results.size(), geoRadius.getDist(), geoRadius.getUnit());
-				return results;
-		}
-
-		private Metric getMetric(DistanceUnit unit) {
-				Optional<Metrics> metric = Arrays.stream(Metrics.values())
-						.filter(metrics -> metrics.getAbbreviation().equals(unit.getAbbreviation()))
-						.findFirst();
-				return metric.orElseThrow(() -> {
-						throw new IllegalArgumentException("Unsupported distance unit " + unit);
-				});
-		}
-
-		private Set<String> indexCoordinates(String key, String idParent, List<List<Double>> coordinates){
-				log.info("Indexing {} coordinates", coordinates.size());
-
-				Map<String, Point> geoPoints = new HashMap<>();
-
-				AtomicInteger idCounter = new AtomicInteger(0);
-				coordinates
-						.forEach(coordinate -> {
-								String id = String.format(ID_FORMAT, idParent, idCounter.getAndIncrement());
-								Point point = new Point(coordinate.get(0), coordinate.get(1));
-								geoPoints.put(id, point);
-						});
-				Long result = geoOperations.add(key, geoPoints);
-				log.info("Indexed {} points.", result);
-				return geoPoints.keySet();
-		}
-
-		private Set<String> extractFromGeoResults(GeoResults<GeoLocation<String>> geoResults) {
-				if (geoResults != null) {
-						return geoResults.getContent().stream()
-								.map(geoLocationGeoResult -> geoLocationGeoResult.getContent().getName())
-								.map(id -> {
-										int index = id.lastIndexOf(ID_SEPARATOR);
-										return id.substring(0, index);
-								}).collect(Collectors.toSet());
-				}
-				return Collections.emptySet();
-		}
 }

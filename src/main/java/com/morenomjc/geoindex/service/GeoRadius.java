@@ -8,10 +8,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GeoRadius {
 
-		private final String key;
-		private final Double lat;
-		private final Double lon;
-		private final Double dist;
-		private final DistanceUnit unit;
+	private final String key;
+
+	private final Double lat;
+
+	private final Double lon;
+
+	private final Double dist;
+
+	private final DistanceUnit unit;
 
 }

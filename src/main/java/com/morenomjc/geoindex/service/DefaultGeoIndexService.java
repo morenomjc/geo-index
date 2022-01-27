@@ -7,15 +7,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Profile("default")
-public class DefaultGeoIndexService implements GeoIndexService{
+public class DefaultGeoIndexService implements GeoIndexService {
 
-		@Override
-		public Set<String> index(GeoIndex geoIndex) {
-				return Collections.emptySet();
-		}
+	@Override
+	public Set<String> index(GeoIndex geoIndex) {
+		return Collections.emptySet();
+	}
 
-		@Override
-		public Set<String> radius(GeoRadius geoRadius) {
-				return Collections.emptySet();
-		}
+	@Override
+	public Set<String> radius(GeoRadius geoRadius) {
+		return Collections.emptySet();
+	}
+
 }
