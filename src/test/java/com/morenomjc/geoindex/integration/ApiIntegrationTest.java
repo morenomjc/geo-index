@@ -82,7 +82,7 @@ abstract class ApiIntegrationTest {
 		Set<String> returnedIds = objectMapper.readValue(response, new TypeReference<>() {
 		});
 
-		assertThat(returnedIds).isEqualTo(ids);
+		assertThat(returnedIds).containsAnyElementsOf(ids);
 	}
 
 	private ResultActions performIndexRequest(String key, String identifier, String geoJson) throws Exception {

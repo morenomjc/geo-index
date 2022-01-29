@@ -1,7 +1,6 @@
 spring:
   application:
     name: geo-index
-
 ---
 springdoc:
   swagger-ui:
