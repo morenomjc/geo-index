@@ -1,19 +1,15 @@
 package com.morenomjc.geoindex.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty("testcontainers")
+@OpenAPIDefinition(
+		info = @Info(
+				title = "Geo-Index API"
+		)
+)
 public class OpenApiConfig {
-
-	@Bean
-	public OpenAPI geoIndexApi(@Value("${spring.profiles.active}") String profiles) {
-		return new OpenAPI().info(new io.swagger.v3.oas.models.info.Info().title("GeoIndex API Definition")
-				.description("Implementation: <b>" + profiles.toUpperCase() + "</b>"));
-	}
 
 }
