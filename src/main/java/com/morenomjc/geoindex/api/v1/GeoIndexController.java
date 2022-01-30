@@ -28,7 +28,7 @@ public class GeoIndexController {
 
 	private final GeoIndexService geoIndexService;
 
-	@Operation(summary = "Index all points in the GeoJSON. Returns the list of generated ids for each points indexed.")
+	@Operation(summary = "Index the GeoJSON object. Returns the list of generated ids for each points indexed.")
 	@PostMapping(path = "/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Set<String>> index(@PathVariable String key, @RequestParam String id,
 			@RequestBody String json) {
@@ -36,7 +36,7 @@ public class GeoIndexController {
 		return ResponseEntity.ok(geoIndexService.index(new GeoIndex(key, id, json)));
 	}
 
-	@Operation(summary = "Search for locations within. Returns the ids within radius of input.")
+	@Operation(summary = "Search for locations nearby. Returns the ids within radius of input.")
 	@GetMapping(path = "/{key}/radius", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Set<String>> radius(@PathVariable String key, @RequestParam Double lat,
 			@RequestParam Double lon, @RequestParam Double dist, @RequestParam DistanceUnit unit) {
