@@ -1,13 +1,14 @@
 package com.morenomjc.geoindex.service;
 
-import com.mapbox.geojson.GeoJson;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.Polygon;
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,34 +18,33 @@ import java.util.stream.Collectors;
 public class GeoJsonServiceImpl implements GeoJsonService {
 
 	@Override
-	public List<List<Double>> extractCoordinates(GeoJson geoJson) {
-		switch (geoJson.type()) {
+	public List<List<Double>> extractCoordinates(Geometry geometry) {
+		switch (geometry.getGeometryType()) {
 		case "Point":
-			return extractFromPoint((Point) geoJson);
+			return extractFromPoint((Point) geometry);
 		case "LineString":
-			return extractFromLineString((LineString) geoJson);
+			return extractFromLineString((LineString) geometry);
 		case "Polygon":
-			return extractFromPolygon((Polygon) geoJson);
+			return extractFromPolygon((Polygon) geometry);
 		default:
 			return Collections.emptyList();
 		}
 	}
 
-	public List<Double> toCoordinates(Point point) {
-		return point.coordinates();
+	public List<Double> getCoordinates(Coordinate coordinate) {
+		return List.of(coordinate.getX(), coordinate.getY());
 	}
 
 	public List<List<Double>> extractFromPoint(Point point) {
-		return Collections.singletonList(point.coordinates());
+		return Collections.singletonList(getCoordinates(point.getCoordinate()));
 	}
 
 	public List<List<Double>> extractFromLineString(LineString lineString) {
-		return lineString.coordinates().stream().map(this::toCoordinates).collect(Collectors.toList());
+		return Arrays.stream(lineString.getCoordinates()).map(this::getCoordinates).collect(Collectors.toList());
 	}
 
 	public List<List<Double>> extractFromPolygon(Polygon polygon) {
-		return polygon.coordinates().stream().flatMap(Collection::stream).map(this::toCoordinates)
-				.collect(Collectors.toList());
+		return Arrays.stream(polygon.getCoordinates()).map(this::getCoordinates).collect(Collectors.toList());
 	}
 
 }

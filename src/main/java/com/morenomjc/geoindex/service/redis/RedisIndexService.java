@@ -1,23 +1,14 @@
 package com.morenomjc.geoindex.service.redis;
 
-import com.mapbox.geojson.GeoJson;
 import com.morenomjc.geoindex.api.model.DistanceUnit;
 import com.morenomjc.geoindex.service.GeoIndex;
 import com.morenomjc.geoindex.service.GeoIndexService;
 import com.morenomjc.geoindex.service.GeoJsonService;
 import com.morenomjc.geoindex.service.GeoRadius;
-import com.morenomjc.geoindex.utils.GeoJsonUtils;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.geotools.geojson.geom.GeometryJSON;
+import org.locationtech.jts.geom.Geometry;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.geo.Circle;
 import org.springframework.data.geo.Distance;
@@ -29,6 +20,17 @@ import org.springframework.data.redis.connection.RedisGeoCommands.GeoLocation;
 import org.springframework.data.redis.core.GeoOperations;
 import org.springframework.data.redis.domain.geo.Metrics;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -42,13 +44,23 @@ public class RedisIndexService implements GeoIndexService {
 
 	private final GeoJsonService geoJsonService;
 
+	private final GeometryJSON geometryJSON = new GeometryJSON();
+
 	private final GeoOperations<String, String> geoOperations;
 
 	@Override
 	public Set<String> index(GeoIndex geoIndex) {
-		GeoJson geoJson = GeoJsonUtils.fromJson(geoIndex.getGeoJson());
-		List<List<Double>> coordinates = geoJsonService.extractCoordinates(geoJson);
-		return indexCoordinates(geoIndex.getKey(), geoIndex.getId(), coordinates);
+		try {
+			Geometry geometry = geometryJSON.read(geoIndex.getGeoJson());
+			log.info("Type: {}", geometry.getGeometryType());
+
+			List<List<Double>> coordinates = geoJsonService.extractCoordinates(geometry);
+			return indexCoordinates(geoIndex.getKey(), geoIndex.getId(), coordinates);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return Collections.emptySet();
+		}
 	}
 
 	@Override

@@ -19,6 +19,7 @@
 		<testcontainers.version>1.16.2</testcontainers.version>
 		<spring.doc.version>1.6.3</spring.doc.version>
 		<mapbox-sdk-geojson.version>5.8.0</mapbox-sdk-geojson.version>
+		<gt-geojson.version>24.2</gt-geojson.version>
 	</properties>
 
 	<dependencies>
@@ -49,18 +50,12 @@
 		<dependency>
 			<groupId>io.oss84.geotools</groupId>
 			<artifactId>gt-geojson</artifactId>
-			<version>24.2</version>
+			<version>${gt-geojson.version}</version>
 		</dependency>
 		<dependency>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<groupId>org.springdoc</groupId>
 			<version>${spring.doc.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.mapbox.mapboxsdk</groupId>
-			<artifactId>mapbox-sdk-geojson</artifactId>
-			<version>${mapbox-sdk-geojson.version}</version>
 		</dependency>
 
 		<dependency>

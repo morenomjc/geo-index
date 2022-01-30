@@ -4,6 +4,10 @@ CREATE TABLE geometries
     geometry   geometry     NOT NULL,
     identifier varchar(255) NOT NULL,
     "key"      varchar(255) NOT NULL,
-    CONSTRAINT geometries_pkey PRIMARY KEY (id),
-    CONSTRAINT uk_2kviec8hw9rqvakku4ahhqbwd UNIQUE (identifier, key)
+    CONSTRAINT geometries_pk PRIMARY KEY (id),
+    CONSTRAINT geometries_uk UNIQUE (identifier, key)
 );
+-- This will allow for faster queries
+CREATE INDEX geometries_idx
+    ON geometries
+    USING GIST (geometry);

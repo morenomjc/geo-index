@@ -6,9 +6,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 @ActiveProfiles("redis")
-@ContextConfiguration(
-        classes = {GeoIndexApplication.class},
-        initializers = { ContainerUtils.RedisContainerInitializer.class })
+@ContextConfiguration(classes = { GeoIndexApplication.class },
+		initializers = { ContainerUtils.RedisContainerInitializer.class })
 public class RedisIntegrationTest extends ApiIntegrationTest {
 
 }

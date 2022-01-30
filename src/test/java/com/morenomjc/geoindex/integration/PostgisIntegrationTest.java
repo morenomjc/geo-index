@@ -6,9 +6,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 @ActiveProfiles("postgis")
-@ContextConfiguration(
-        classes = {GeoIndexApplication.class},
-        initializers = { ContainerUtils.PostgisContainerInitializer.class })
+@ContextConfiguration(classes = { GeoIndexApplication.class },
+		initializers = { ContainerUtils.PostgisContainerInitializer.class })
 public class PostgisIntegrationTest extends ApiIntegrationTest {
 
 }
