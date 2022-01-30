@@ -1,4 +1,4 @@
-package com.morenomjc.geoindex.integration;
+package com.morenomjc.geoindex.utils;
 
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -29,6 +29,7 @@ public abstract class ContainerUtils {
 		public void initialize(ConfigurableApplicationContext context) {
 			var env = context.getEnvironment();
 			env.getPropertySources().addFirst(new MapPropertySource("testcontainers", getProperties()));
+			env.setActiveProfiles("redis");
 		}
 
 	}
@@ -52,6 +53,7 @@ public abstract class ContainerUtils {
 		public void initialize(ConfigurableApplicationContext context) {
 			var env = context.getEnvironment();
 			env.getPropertySources().addFirst(new MapPropertySource("testcontainers", getProperties()));
+			env.addActiveProfile("postgis");
 		}
 
 	}

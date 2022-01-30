@@ -7,7 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GeoIndexApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GeoIndexApplication.class, args);
+		createApplication().run(args);
+	}
+
+	public static SpringApplication createApplication() {
+		return new SpringApplication(GeoIndexApplication.class);
 	}
 
 }
