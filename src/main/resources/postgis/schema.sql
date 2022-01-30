@@ -11,3 +11,5 @@ CREATE TABLE geometries
 CREATE INDEX geometries_idx
     ON geometries
     USING GIST (geometry);
+
+CREATE SEQUENCE geometries_seq START 1 INCREMENT 10;
