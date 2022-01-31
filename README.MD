@@ -21,3 +21,7 @@ The implementation is tested on the API level regardless of the underlying backe
 The base test `ApiIntegrationTest` is inherited by different test classes to activate the implementation to be tested.
 1. `RedisIntegrationTest` - activating the `redis` profile and starting the Redis container
 2. `PostgisIntegrationTest` - activating the `postgis` profile and starting the PostGIS container
+
+## Blog
+
+[Geospatial indexing app with different backends using Spring Boot and Testcontainers](https://link.medium.com/N2vaTzhUgnb)
