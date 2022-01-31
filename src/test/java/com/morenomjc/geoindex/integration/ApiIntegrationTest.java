@@ -59,7 +59,7 @@ abstract class ApiIntegrationTest {
 	}
 
 	static Stream<Arguments> searchQueries() {
-		return Stream.of(of(4.892692565917969, 52.37203595971475, 23.0, DistanceUnit.MI, Set.of("1", "2")));
+		return Stream.of(of(4.892692565917969, 52.37203595971475, 37000.0, DistanceUnit.M, Set.of("1", "2")));
 	}
 
 	@Order(1)
@@ -82,7 +82,7 @@ abstract class ApiIntegrationTest {
 		Set<String> returnedIds = objectMapper.readValue(response, new TypeReference<>() {
 		});
 
-		assertThat(returnedIds).containsAnyElementsOf(ids);
+		assertThat(returnedIds).containsAll(ids);
 	}
 
 	private ResultActions performIndexRequest(String key, String identifier, String geoJson) throws Exception {

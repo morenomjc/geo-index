@@ -7,8 +7,7 @@ import java.util.List;
 
 public interface GeometricEntityRepository extends JpaRepository<GeometricEntity, Long> {
 
-	// TODO - support different unit of measure for distance
-	@Query(value = "SELECT * FROM geometries AS g WHERE g.key = ?1 AND ST_DWithin(g.geometry,ST_MakePoint(?2,?3),?4 * 1609.34)",
+	@Query(value = "SELECT * FROM geometries AS g WHERE g.key = ?1 AND ST_DWithin(ST_SetSRID(g.geometry, 4326)\\:\\:geography, ST_SetSRID(ST_MakePoint(?2,?3), 4326)\\:\\:geography,?4)",
 			nativeQuery = true)
 	List<GeometricEntity> findWithin(String key, Double lat, Double lon, Double dist);
 

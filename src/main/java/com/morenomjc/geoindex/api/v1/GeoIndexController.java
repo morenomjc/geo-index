@@ -6,7 +6,6 @@ import com.morenomjc.geoindex.service.GeoIndexService;
 import com.morenomjc.geoindex.service.GeoRadius;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Set;
 
 @Slf4j
 @Tag(name = "Geo Index")
@@ -39,7 +40,7 @@ public class GeoIndexController {
 	@Operation(summary = "Search for locations nearby. Returns the ids within radius of input.")
 	@GetMapping(path = "/{key}/radius", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Set<String>> radius(@PathVariable String key, @RequestParam Double lat,
-			@RequestParam Double lon, @RequestParam Double dist, @RequestParam DistanceUnit unit) {
+			@RequestParam Double lon, @RequestParam Double dist, @RequestParam(defaultValue = "M") DistanceUnit unit) {
 		log.info("Radius search request received.");
 		return ResponseEntity.ok(geoIndexService.radius(new GeoRadius(key, lat, lon, dist, unit)));
 	}
