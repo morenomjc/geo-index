@@ -15,19 +15,6 @@ If you prefer to save the state of the data on each application run, the base Sp
 1. Index a GeoJSON object
 2. Search for geometric objects within a certain distance
 
-### Using Redis
-When indexing, all points from the GeoJSON object are extracted and indexed individually.
-
-Each point are indexed using the format `<id>:<index>` within the `key` partition.
-
-Proximity query can only be performed within the `key` partition they are indexed. Returns only the unique ids.
-
-#### Local container
-
-### Using PostGIS
-
-> TODO - support different unit of distance. currently, in miles.
-
 ## Integration Tests
 
 The implementation is tested on the API level regardless of the underlying backend. 
