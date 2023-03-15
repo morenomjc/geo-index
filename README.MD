@@ -24,4 +24,4 @@ The base test `ApiIntegrationTest` is inherited by different test classes to act
 
 ## Blog
 
-[Geospatial indexing app with different backends using Spring Boot and Testcontainers](https://link.medium.com/N2vaTzhUgnb)
+[Geospatial indexing app with different backends using Spring Boot and Testcontainers](https://www.morenomjc.dev/geospatial-indexing)
