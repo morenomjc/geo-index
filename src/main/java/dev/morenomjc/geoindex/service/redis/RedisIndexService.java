@@ -40,6 +40,7 @@ public class RedisIndexService implements GeoIndexService {
 		geoOperations = redisOperations.opsForGeo();
 
 		GeoJSONReader geoJSONReader = new GeoJSONReader(geoIndexRequest.getGeoJson());
+
 		Geometry geometry = (Geometry) geoJSONReader.getFeature().getDefaultGeometryProperty().getValue();
 		log.info("Type: {}", geometry.getGeometryType());
 

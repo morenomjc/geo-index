@@ -42,7 +42,7 @@ abstract class ApiIntegrationTest {
 
 	private static final String BASE_URL = "/v1/geo-indexes";
 	private static final String GEOJSON_FOLDER = "src/test/resources/geojson/";
-	private static final String INDEX_KEY = "oimmmtyftctk";
+	private static final String INDEX_KEY = "test-index";
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -64,8 +64,11 @@ abstract class ApiIntegrationTest {
 	@ParameterizedTest(name = "{index} - {0}")
 	@MethodSource("geoJsonFiles")
 	void testIndexEndpointUsingDifferentGeoJsonTypes(String type, String id, String geoJson) throws Exception {
-		performIndexRequest(INDEX_KEY, id, geoJson).andExpectAll(status().isOk(), jsonPath("$.*").isNotEmpty())
-				.andDo(print());
+		performIndexRequest(INDEX_KEY, id, geoJson)
+				.andExpectAll(
+						status().isOk(),
+						jsonPath("$.*").isNotEmpty()
+				).andDo(print());
 	}
 
 	@Order(2)
@@ -73,12 +76,13 @@ abstract class ApiIntegrationTest {
 	@MethodSource("searchQueries")
 	void testSearchEndpointUsingDifferentQueries(Double lat, Double lon, Double dist, DistanceUnit unit,
 			Set<String> ids) throws Exception {
-		MvcResult mvcResult = performSearchRequest(INDEX_KEY, lat, lon, dist, unit).andExpectAll(status().isOk())
+
+		MvcResult mvcResult = performSearchRequest(INDEX_KEY, lat, lon, dist, unit)
+				.andExpectAll(status().isOk())
 				.andDo(print()).andReturn();
 
 		String response = mvcResult.getResponse().getContentAsString();
-		Set<String> returnedIds = objectMapper.readValue(response, new TypeReference<>() {
-		});
+		Set<String> returnedIds = objectMapper.readValue(response, new TypeReference<>() {});
 
 		assertThat(returnedIds).containsAll(ids);
 	}
@@ -90,8 +94,11 @@ abstract class ApiIntegrationTest {
 
 	private ResultActions performSearchRequest(String key, Double lat, Double lon, Double dist, DistanceUnit unit)
 			throws Exception {
-		return this.mockMvc.perform(get(BASE_URL + "/{0}/radius", key).contentType(MediaType.APPLICATION_JSON)
-				.param("lat", String.valueOf(lat)).param("lon", String.valueOf(lon)).param("dist", String.valueOf(dist))
+		return this.mockMvc.perform(get(BASE_URL + "/{0}/radius", key)
+				.contentType(MediaType.APPLICATION_JSON)
+				.param("lat", String.valueOf(lat))
+				.param("lon", String.valueOf(lon))
+				.param("dist", String.valueOf(dist))
 				.param("unit", unit.name()));
 	}
 
