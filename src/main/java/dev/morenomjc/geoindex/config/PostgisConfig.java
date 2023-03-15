@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Profile("postgis")
-@EntityScan("com.morenomjc.geoindex.service.postgis")
-@EnableJpaRepositories("com.morenomjc.geoindex.service.postgis")
+@EntityScan("dev.morenomjc.geoindex.service.postgis")
+@EnableJpaRepositories("dev.morenomjc.geoindex.service.postgis")
 @Configuration
 public class PostgisConfig {
 

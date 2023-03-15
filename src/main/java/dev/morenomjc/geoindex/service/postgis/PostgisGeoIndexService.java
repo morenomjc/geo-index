@@ -36,8 +36,7 @@ public class PostgisGeoIndexService implements GeoIndexService {
 					.save(buildEntity(geoIndex.getKey(), geoIndex.getId(), geometry));
 			log.info("Indexed with id: {}", entity.getId());
 			return Set.of(geoIndex.getId());
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return Collections.emptySet();

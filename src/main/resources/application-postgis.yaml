@@ -4,10 +4,9 @@ spring:
       - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/postgres
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgis
   jpa:
-    database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
     hibernate:
       ddl-auto: validate
