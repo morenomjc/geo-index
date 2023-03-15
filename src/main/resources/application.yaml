@@ -1,7 +1,9 @@
 spring:
   application:
     name: geo-index
----
+  profiles:
+    active:
+      - redis
 springdoc:
   swagger-ui:
     path: /
